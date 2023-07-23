@@ -1,0 +1,20 @@
+.active {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.fade {
+  animation-name: fade;
+  animation: fade 0.8s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  } to {
+    opacity: 1;
+  }
+}
