@@ -102,13 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Modal window
   const modalWindow = document.querySelector(".modal");
+  const modalTImerID = setTimeout(openModal, 3000);
 
   document.addEventListener("click", (e) => {
     const target = e.target;
 
     if (target.hasAttribute("data-modal-open")) {
-      modalWindow.classList.add("fade");
-      modalWindow.classList.add("active");
+      openModal(modalWindow);
     }
 
     if (target.hasAttribute("data-modal-close")) {
@@ -120,14 +120,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modalWindow.classList.contains('active')) {
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modalWindow.classList.contains("active")) {
       closeModal(modalWindow);
     }
-  })
+  });
 
-  function closeModal(modalEl) {
+  function openModal(modalEl = modalWindow) {
+    modalEl.classList.add("fade");
+    modalEl.classList.add("active");
+    document.body.style.overflow = "hidden";
+    clearInterval(modalTImerID);
+  }
+
+  function closeModal(modalEl = modalWindow) {
     modalEl.classList.remove("fade");
     modalEl.classList.remove("active");
+    document.body.style.overflow = "";
   }
+
+  function openModalByScroll() {
+    if (
+      window.scrollY + document.documentElement.clientHeight >=
+      document.documentElement.scrollHeight - 1
+    ) {
+      openModal(modalWindow);
+      window.removeEventListener("scroll", openModalByScroll);
+    }
+  }
+
+  window.addEventListener("scroll", openModalByScroll);
 });
