@@ -39,17 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Timer
-  // Get current date + 2 days;
-  // function getNextDays() {
-  //   const year = new Date().getFullYear(),
-  //     month = new Date().getMonth(),
-  //     day = new Date().getDate();
-
-  //   return `${year}-${month + 1}-${day + 20}`;
-  // }
-
-  // const deadline = getNextDays();
   const deadline = "2023-12-31";
+
+  setClock(".timer", deadline);
 
   function getTimeRemaining(endtime) {
     let days, hours, minutes, seconds;
@@ -108,5 +100,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  setClock(".timer", deadline);
+  // Modal window
+  const modalWindow = document.querySelector(".modal");
+
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+
+    if (target.hasAttribute("data-modal-open")) {
+      modalWindow.classList.add("fade");
+      modalWindow.classList.add("active");
+    }
+
+    if (target.hasAttribute("data-modal-close")) {
+      closeModal(modalWindow);
+    }
+
+    if (target === modalWindow) {
+      closeModal(modalWindow);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalWindow.classList.contains('active')) {
+      closeModal(modalWindow);
+    }
+  })
+
+  function closeModal(modalEl) {
+    modalEl.classList.remove("fade");
+    modalEl.classList.remove("active");
+  }
 });
