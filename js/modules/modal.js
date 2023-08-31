@@ -1,52 +1,58 @@
-function modal() {
+function openModal(modalSelector, modalTimerId) {
+  const modalWindow = document.querySelector(modalSelector);
+
+  modalWindow.classList.add("fade");
+  modalWindow.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  if (modalTimerId) {
+    clearInterval(modalTimerId);
+  }
+}
+
+function closeModal(modalSelector) {
+  const modalWindow = document.querySelector(modalSelector);
+
+  modalWindow.classList.remove("fade");
+  modalWindow.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function modal(modalSelector, modalTimerId) {
   // Modal window
-  const modalWindow = document.querySelector(".modal");
-  const modalTImerID = setTimeout(openModal, 99000);
+  const modalWindow = document.querySelector(modalSelector);
 
   document.addEventListener("click", (e) => {
     const target = e.target;
 
     if (target.hasAttribute("data-modal-open")) {
-      openModal(modalWindow);
+      openModal(modalSelector, modalTimerId);
     }
 
     if (
       target.hasAttribute("data-modal-close") ||
       target.getAttribute("data-close") === ""
     ) {
-      closeModal(modalWindow);
+      closeModal(modalSelector);
     }
 
     if (target === modalWindow) {
-      closeModal(modalWindow);
+      closeModal(modalSelector);
     }
   });
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modalWindow.classList.contains("active")) {
-      closeModal(modalWindow);
+      closeModal(modalSelector);
     }
   });
-
-  function openModal(modalEl = modalWindow) {
-    modalEl.classList.add("fade");
-    modalEl.classList.add("active");
-    document.body.style.overflow = "hidden";
-    clearInterval(modalTImerID);
-  }
-
-  function closeModal(modalEl = modalWindow) {
-    modalEl.classList.remove("fade");
-    modalEl.classList.remove("active");
-    document.body.style.overflow = "";
-  }
 
   function openModalByScroll() {
     if (
       window.scrollY + document.documentElement.clientHeight >=
       document.documentElement.scrollHeight - 1
     ) {
-      openModal(modalWindow);
+      openModal(modalSelector, modalTimerId);
       window.removeEventListener("scroll", openModalByScroll);
     }
   }
@@ -54,4 +60,5 @@ function modal() {
   window.addEventListener("scroll", openModalByScroll);
 }
 
-module.exports = modal;
+export default modal;
+export { closeModal, openModal };
